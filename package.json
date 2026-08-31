@@ -1,0 +1,20 @@
+{
+  "name": "bitcoin-wallet-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild js/app.js --bundle --minify --outfile=js/app.bundle.js",
+    "build:dev": "esbuild js/app.js --bundle --outfile=js/app.bundle.js --sourcemap"
+  },
+  "dependencies": {
+    "@bitcoin-js/tiny-secp256k1-asmjs": "2.2.4",
+    "bitcoinjs-lib": "7.0.1",
+    "bip32": "5.0.1",
+    "bip39": "3.1.0",
+    "buffer": "^6.0.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
