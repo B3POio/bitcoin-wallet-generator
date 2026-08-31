@@ -1,119 +1,427 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>Bitcoin Wallet</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="keyword" content="Bitcoin, Bitcoin wallet, BTC, BTC wallet, Paper wallet, crypto" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="assets/css/cssanimation.min.css" />
-		<link rel="stylesheet" href="assets/css/animate.min.css">
-		<script type="text/javascript" src="assets/js/buidl.js"></script>
-		<script type="text/javascript" src="assets/js/qrcode.js"></script>
-		<script type="text/javascript" src="assets/js/qrcode.min.js"></script>
-		<script>alert("Attention! This is a test app!! NOT for use or distribution!!!");</script>
-	</head>
-	<body>
-			<header id="header" class="alt">
-				<div class="logo"><a href="index.html"><span><img src="images/bitcoin.png"></span></a></div>
-				<a href="#menu">Menu</a>
-			</header>
-			<nav id="menu">
-				<ul class="links">
-					<li><a href="https://bitcoin.org/en">Home</a></li>
-					<li><a href="https://coinbase.com/buy-bitcoin">Buy BTC</a></li>
-				</ul>
-				<ul class="icons">
-						<li><a href="https://reddit.com/r/Bitcoin" class="icon fa-reddit"><span class="label">Reddit</span></a></li>
-						<li><a href="https://github.com/bitcoin/bitcoin" class="icon fa-github"><span class="label">Github</span></a></li>
-				</ul>
-			</nav>
-			<section id="banner">
-				<div class="inner">
-					<header>
-						<h1 class="cssanimation effect3d">Bitcoin</h1>
-						<p><strong style="color:white">Wallet Generator</strong></p>
-						<a href="btc-wallet.zip" class="button medium">Download SRC Code</a>
-					</header>
-					<br>
-					<p class="cssanimation leFadeInRight sequence">Donate BTC:</p>
-					<button onclick="donate()">Copy Donation Address</button>
-					<input type="text" id="donate" style="text-align:center;" size="33" value ="34hr4vUr29FQQ7Az1gPYxzesFJC6tszfjC" readonly>
-				</div>
-				</div>
-			</section>
-			
-			<div id="main">
-				<section class="wrapper style1">
-					<div class="inner">
-						<header class="align-center">
-							<h2>Paper Wallet Generator</h2>
-							<p>Click the button to generate your own paper wallet with secure QR codes:</p>
-							<button id="generate" onClick="return generate();">Generate Address</button>
-						</header>
-						<div class="flex flex-2">
-							
-							<div class="col align-center">
-									<div id="QRDiv"></div>
-								<h3 id="addQRHead" style="display:none;" >Address QRcode</h3>	
-								<button id="copyAdd" style="display:none;" onClick="return address();">Copy Address</button>
-								<h3 id="addHead" style="display:none;" >Bitcoin Address:</h3>
-								<textarea id="addDiv" row="2" style="display:none;" readonly></textarea>
-							</div>
-							<div class="col align-center">
-									<div id="QRpiDiv"></div>
-								<h3 id="piQRHead" style="display:none;" > Private Key QRcode</h3>
-								<button id="copyKey" style="display:none;" onClick="return key();">Copy Key</button>
-								<h3 id="piKeyHead" style="display:none;" >Bitcoin Private Key:</h3>
-								<textarea id="piKeyDiv" style="display:none;" row="2" readonly></textarea>
-							</div>
-						</div>
-					</div>
-				</section>
-				<section class="wrapper style2">
-						<div class="inner">
-							<div class="row">
-								<h1>Offline Use:</h1>
-									<dl>
-										<dt>Download files</dt>
-										<dd>
-											<p>Download the files, unzip the folder and open it. Click the index.html file to launch locally in your browser. No internet required.</p>
-										</dd>
-										<dt>Save folder on USB</dt>
-										<dd>
-											<p>Save the src code folder to a usb. Now you can plug in your USB to any computer and pull up a browser to generate paper wallets.</p>
-										</dd>
-										<dt>Generate paper wallets</dt>
-										<dd>
-											<p>Generate a paper wallet anytime, anywhere with this front-end client. Protect yourself from spies and hackers with paper wallets.</p>
-										</dd>
-									</dl>
-							</div>
+<!DOCTYPE html>
+<html lang="en">
 
-					<a href="btc-wallet.zip" class="button scrolly center">Download SRC Code</a>
-						</div>
-					</section>
-			</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-			<footer id="footer">
-				<div class="copyright">
-					<ul class="icons">
-						<li><a href="https://bitcoin.org/en" class="icon fa-bitcoin"><span class="label">Bitcoin</span></a></li>
-						<li><a href="https://reddit.com/r/Bitcoin" class="icon fa-reddit"><span class="label">Reddit</span></a></li>
-						<li><a href="https://github.com/bitcoin/bitcoin" class="icon fa-github"><span class="label">Github</span></a></li>
-					</ul>
-					<p>&copy; Btc-wallet.io <br> All rights reserved <br> Designed by: <a href="http://cyntax.org">Cyntax</a> <br> <button onclick="donate()">Copy Donation Address</button>
-						<br> </p> <!--<input type = "text" id="donate" size="33" value ="34hr4vUr29FQQ7Az1gPYxzesFJC6tszfjC" readonly>-->
-				</div>
-			</footer>
-			<script src="assets/js/simple.js"></script>
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/letteranimation.js"></script>
+    <title>Bitcoin Wallet Generator</title>
 
-	</body>
+    <meta name="description" content="Generate a Bitcoin wallet locally in your browser.">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <h1>Bitcoin Wallet Generator</h1>
+            <p>
+                Generate a Bitcoin wallet locally in your browser.
+            </p>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- Wallet Generator -->
+
+        <section class="card" id="generator">
+
+            <div class="card-header">
+                <h2>Create a New Wallet</h2>
+
+                <p>
+                    Your wallet is generated locally. No private keys
+                    or recovery phrases are sent to a server.
+                </p>
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="network">
+                    Network
+                </label>
+
+                <select id="network">
+                    <option value="bitcoin">
+                        Bitcoin Mainnet
+                    </option>
+
+                    <option value="testnet">
+                        Bitcoin Testnet
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="wordCount">
+                    Recovery Phrase
+                </label>
+
+                <select id="wordCount">
+                    <option value="12">
+                        12 words
+                    </option>
+
+                    <option value="24">
+                        24 words
+                    </option>
+                </select>
+
+            </div>
+
+
+            <button type="button" id="generateButton" class="button button-primary">
+                Generate New Wallet
+            </button>
+
+
+            <div id="securityStatus" class="security-status">
+                <span id="securityStatusText">
+                    Checking browser security...
+                </span>
+            </div>
+
+
+            <div id="offlineWarning" class="warning" hidden>
+                <strong>Offline use recommended</strong>
+
+                <p>
+                    For wallets containing real funds, download and
+                    verify this application before disconnecting the
+                    computer from the internet and generating your wallet.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- Generated Wallet -->
+
+        <section class="card wallet-card" id="walletCard" hidden>
+
+            <div class="card-header wallet-header">
+
+                <div>
+                    <h2>Your Wallet</h2>
+
+                    <p>
+                        Write down your recovery phrase and store it
+                        somewhere secure.
+                    </p>
+                </div>
+
+                <span id="networkBadge" class="network-badge">
+                    MAINNET
+                </span>
+
+            </div>
+
+
+            <!-- Security Warning -->
+
+            <div class="danger-box">
+
+                <strong>
+                    Never share your recovery phrase.
+                </strong>
+
+                <p>
+                    Anyone who has your recovery phrase can control
+                    the Bitcoin in this wallet. We will never ask
+                    you to enter it into a website.
+                </p>
+
+            </div>
+
+
+            <!-- Recovery Phrase -->
+
+            <section class="wallet-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h3>
+                            Recovery Phrase
+                        </h3>
+
+                        <p>
+                            Your recovery phrase is the backup for
+                            this wallet.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="mnemonicGrid" class="mnemonic-grid" aria-label="Bitcoin wallet recovery phrase">
+                </div>
+
+
+                <div class="button-row">
+
+                    <button type="button" id="toggleMnemonicButton" class="button">
+                        Hide Recovery Phrase
+                    </button>
+
+                    <button type="button" id="copyMnemonicButton" class="button">
+                        Copy Recovery Phrase
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- Receiving Address -->
+
+            <section class="wallet-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h3>
+                            First Receiving Address
+                        </h3>
+
+                        <p>
+                            This is your first native SegWit Bitcoin
+                            receiving address.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="address-container">
+
+                    <code id="address" class="address"></code>
+
+
+                    <button type="button" id="copyAddressButton" class="button">
+                        Copy Address
+                    </button>
+
+                </div>
+
+
+                <div class="derivation-info">
+
+                    <span>
+                        Derivation path
+                    </span>
+
+                    <code id="derivationPath"></code>
+
+                </div>
+
+            </section>
+
+
+            <!-- Wallet Verification -->
+
+            <section class="wallet-section">
+
+                <div class="verification">
+
+                    <div class="verification-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Wallet verified
+                        </strong>
+
+                        <p>
+                            The generated recovery phrase was used to
+                            independently derive this wallet's address.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Advanced Information -->
+
+            <section class="wallet-section">
+
+                <details>
+
+                    <summary>
+                        Advanced Wallet Information
+                    </summary>
+
+
+                    <div class="advanced-information">
+
+                        <div class="data-row">
+
+                            <span>
+                                Master Fingerprint
+                            </span>
+
+                            <code id="fingerprint"></code>
+
+                        </div>
+
+
+                        <div class="data-row">
+
+                            <span>
+                                Account Extended Public Key
+                            </span>
+
+                            <code id="xpub"></code>
+
+                        </div>
+
+
+                        <div class="data-row">
+
+                            <span>
+                                Derivation Standard
+                            </span>
+
+                            <code>
+                                BIP84
+                            </code>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+            </section>
+
+
+            <!-- Backup / Print -->
+
+            <section class="wallet-section backup-section">
+
+                <h3>
+                    Backup
+                </h3>
+
+                <p>
+                    Store your recovery phrase securely before
+                    destroying this wallet from the browser.
+                </p>
+
+
+                <div class="button-row">
+
+                    <button type="button" id="printButton" class="button button-primary">
+                        Print Backup
+                    </button>
+
+                    <button type="button" id="destroyButton" class="button button-danger">
+                        Destroy Wallet
+                    </button>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- Information -->
+
+        <section class="card information-card">
+
+            <h2>About This Generator</h2>
+
+            <p>
+                This application generates a deterministic Bitcoin
+                wallet using established Bitcoin wallet standards.
+            </p>
+
+
+            <div class="standards">
+
+                <div class="standard">
+                    <strong>BIP39</strong>
+
+                    <span>
+                        Recovery phrase
+                    </span>
+                </div>
+
+
+                <div class="standard">
+                    <strong>BIP32</strong>
+
+                    <span>
+                        Hierarchical deterministic keys
+                    </span>
+                </div>
+
+
+                <div class="standard">
+                    <strong>BIP84</strong>
+
+                    <span>
+                        Native SegWit addresses
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="warning">
+
+                <strong>
+                    Important
+                </strong>
+
+                <p>
+                    This software has not been independently audited.
+                    Do not use it with significant funds until the
+                    implementation, dependencies, and generated wallets
+                    have been thoroughly verified.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+
+        <div class="container">
+
+            <p>
+                Bitcoin Wallet Generator
+            </p>
+
+            <p>
+                Client-side wallet generation
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- Application -->
+    <script src="js/app.bundle.js"></script>
+
+</body>
+
 </html>
