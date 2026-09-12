@@ -43,6 +43,7 @@ const WalletApp = (() => {
     cacheElements();
     bindEvents();
     checkBrowserSecurity();
+    loadVersionInfo();
   }
 
   function cacheElements() {
@@ -82,6 +83,32 @@ const WalletApp = (() => {
     elements.printButton.addEventListener("click", printBackup);
     elements.destroyButton.addEventListener("click", destroyWallet);
   }
+
+  async function loadVersionInfo() {
+    try {
+      const response = await fetch("http://localhost:3000/api/version");
+
+      if (!response.ok) {
+        throw new Error(`Version API returned HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      const versionElement = document.getElementById("appVersion");
+      const commitElement = document.getElementById("appCommit");
+
+      if (versionElement) {
+        versionElement.textContent = `v${data.version}`;
+      }
+
+      if (commitElement) {
+        commitElement.textContent = `commit ${data.commit}`;
+      }
+    } catch (error) {
+      console.warn("Could not load version information:", error);
+    }
+  }
+
 
   function checkBrowserSecurity() {
     const cryptoAvailable =
