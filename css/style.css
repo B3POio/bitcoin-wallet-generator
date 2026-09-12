@@ -649,6 +649,13 @@ main.container {
     white-space: nowrap;
 }
 
+.mnemonic-grid.mnemonic-hidden .mnemonic-value {
+  color: transparent;
+  text-shadow: 0 0 8px var(--text);
+  user-select: none;
+}
+
+
 
 /* =========================================================
    Button Rows
@@ -1184,6 +1191,13 @@ details[open] summary::after {
     .mnemonic-word {
         background: #ffffff;
         border: 1px solid #cccccc;
+    }
+
+    /* Always show the recovery phrase on the printed backup */
+    .mnemonic-grid.mnemonic-hidden .mnemonic-value {
+        filter: none !important;
+        color: var(--text) !important;
+        text-shadow: none !important;
     }
 
     .address-container {
