@@ -271,7 +271,11 @@ main.container {
 }
 
 .form-group select {
+    display: block;
+
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 48px;
 
     padding: 0 42px 0 14px;
@@ -286,10 +290,21 @@ main.container {
     outline: none;
 
     appearance: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     background-image:
-        linear-gradient(45deg, transparent 50%, #667085 50%),
-        linear-gradient(135deg, #667085 50%, transparent 50%);
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            #667085 50%
+        ),
+        linear-gradient(
+            135deg,
+            #667085 50%,
+            transparent 50%
+        );
 
     background-position:
         calc(100% - 18px) 20px,
@@ -316,6 +331,12 @@ main.container {
     box-shadow:
         0 0 0 4px rgba(247, 147, 26, 0.12);
 }
+
+.form-group select option {
+    color: var(--text);
+    background: var(--surface);
+}
+
 
 
 /* =========================================================
@@ -625,14 +646,18 @@ main.container {
     border-radius: 10px;
 }
 
-.mnemonic-word-number {
+.mnemonic-number {
+    flex: 0 0 auto;
+
     color: var(--text-light);
 
     font-size: 0.72rem;
     font-weight: 700;
 }
 
-.mnemonic-word-text {
+.mnemonic-value {
+    min-width: 0;
+
     overflow: hidden;
 
     color: var(--text);
@@ -649,10 +674,15 @@ main.container {
     white-space: nowrap;
 }
 
+/* Hidden recovery phrase */
+
 .mnemonic-grid.mnemonic-hidden .mnemonic-value {
-  color: transparent;
-  text-shadow: 0 0 8px var(--text);
-  user-select: none;
+    color: transparent;
+
+    text-shadow:
+        0 0 8px var(--text);
+
+    user-select: none;
 }
 
 
@@ -738,6 +768,8 @@ main.container {
     color: var(--text);
 
     font-size: 0.78rem;
+
+    overflow-wrap: anywhere;
 }
 
 
@@ -965,11 +997,67 @@ details[open] summary::after {
 
 /* =========================================================
    Responsive — Tablet
+   1023px and below
    ========================================================= */
 
-@media (max-width: 700px) {
+@media (max-width: 1023px) {
     .site-header {
-        padding: 56px 0 48px;
+        padding: 60px 0 52px;
+    }
+
+    main.container {
+        padding-top: 32px;
+        padding-bottom: 52px;
+    }
+
+    .card {
+        padding: 28px;
+    }
+
+    .wallet-header {
+        gap: 18px;
+    }
+
+    .mnemonic-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .standards {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   Responsive — Mobile
+   767px and below
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .container {
+        width: min(
+            calc(100% - 32px),
+            var(--max-width)
+        );
+    }
+
+    .site-header {
+        padding: 48px 0 44px;
+    }
+
+    .site-header h1 {
+        font-size: clamp(
+            2rem,
+            8vw,
+            2.5rem
+        );
+    }
+
+    .site-header p {
+        margin-top: 12px;
+
+        font-size: 0.95rem;
     }
 
     main.container {
@@ -980,58 +1068,18 @@ details[open] summary::after {
     .card {
         padding: 24px;
 
+        margin-bottom: 18px;
+
         border-radius: 16px;
     }
 
-    .mnemonic-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-    }
-
-    .standards {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* =========================================================
-   Responsive — Mobile
-   ========================================================= */
-
-@media (max-width: 520px) {
-    .container {
-        width: min(
-            calc(100% - 24px),
-            var(--max-width)
-        );
-    }
-
-    .site-header {
-        padding: 44px 0 40px;
-    }
-
-    .site-header h1 {
-        font-size: 2rem;
-    }
-
-    .site-header p {
-        font-size: 0.95rem;
-    }
-
-    main.container {
-        padding-top: 16px;
-    }
-
-    .card {
-        padding: 20px;
-
-        margin-bottom: 16px;
-
-        border-radius: 14px;
-    }
-
     .card-header {
-        margin-bottom: 22px;
+        margin-bottom: 24px;
+    }
+
+    .card-header h2,
+    .information-card h2 {
+        font-size: 1.25rem;
     }
 
     .wallet-header {
@@ -1039,26 +1087,35 @@ details[open] summary::after {
         gap: 12px;
     }
 
+    .network-badge {
+        align-self: flex-start;
+    }
+
+    .wallet-section {
+        padding: 24px 0;
+    }
+
     .mnemonic-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
 
         gap: 8px;
     }
 
     .mnemonic-word {
-        min-height: 44px;
+        min-height: 46px;
 
-        padding: 7px 9px;
+        padding: 8px 10px;
 
-        gap: 7px;
+        gap: 8px;
     }
 
-    .mnemonic-word-number {
-        font-size: 0.65rem;
+    .mnemonic-number {
+        font-size: 0.68rem;
     }
 
-    .mnemonic-word-text {
-        font-size: 0.76rem;
+    .mnemonic-value {
+        font-size: 0.8rem;
     }
 
     .button-row {
@@ -1087,6 +1144,7 @@ details[open] summary::after {
 
     .verification {
         padding: 14px;
+        gap: 12px;
     }
 
     .data-row {
@@ -1102,14 +1160,198 @@ details[open] summary::after {
     summary {
         padding: 14px;
     }
+
+    .standards {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .standard {
+        padding: 16px;
+    }
+
+    .danger-box,
+    .warning {
+        padding: 14px 16px;
+    }
+
+    .form-group select {
+        width: 100%;
+        max-width: 100%;
+
+        padding-left: 12px;
+        padding-right: 38px;
+
+        font-size: 0.9rem;
+    }
+
 }
 
-
 /* =========================================================
-   Very Small Screens
+   Responsive — Small Mobile
+   479px and below
    ========================================================= */
 
-@media (max-width: 360px) {
+@media (max-width: 479px) {
+    .container {
+        width: min(
+            calc(100% - 24px),
+            var(--max-width)
+        );
+    }
+
+    .site-header {
+        padding: 40px 0 36px;
+    }
+
+    .site-header h1 {
+        font-size: 2rem;
+
+        letter-spacing: -0.035em;
+    }
+
+    .site-header p {
+        font-size: 0.9rem;
+    }
+
+    main.container {
+        padding-top: 16px;
+        padding-bottom: 32px;
+    }
+
+    .card {
+        padding: 20px;
+
+        margin-bottom: 16px;
+
+        border-radius: 14px;
+    }
+
+    .card-header {
+        margin-bottom: 20px;
+    }
+
+    .card-header h2,
+    .information-card h2 {
+        font-size: 1.2rem;
+    }
+
+    .card-header p,
+    .information-card > p {
+        font-size: 0.875rem;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group select {
+        min-height: 48px;
+
+        padding-left: 11px;
+        padding-right: 36px;
+
+        font-size: 0.85rem;
+    }
+
+
+    #generateButton {
+        min-height: 50px;
+    }
+
+    .security-status {
+        align-items: flex-start;
+
+        padding: 11px 12px;
+
+        font-size: 0.82rem;
+    }
+
+    .mnemonic-grid {
+        gap: 7px;
+    }
+
+    .mnemonic-word {
+        min-height: 44px;
+
+        padding: 7px 8px;
+
+        gap: 6px;
+    }
+
+    .mnemonic-number {
+        font-size: 0.62rem;
+    }
+
+    .mnemonic-value {
+        font-size: 0.74rem;
+    }
+
+    .address-container {
+        padding: 10px;
+    }
+
+    .address {
+        font-size: 0.76rem;
+
+        line-height: 1.55;
+    }
+
+    .derivation-info {
+        font-size: 0.76rem;
+    }
+
+    .derivation-info code {
+        font-size: 0.72rem;
+    }
+
+    .verification {
+        align-items: flex-start;
+
+        padding: 12px;
+    }
+
+    .verification-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .verification p {
+        font-size: 0.8rem;
+    }
+
+    .advanced-information {
+        padding-inline: 12px;
+    }
+
+    .data-row {
+        padding: 11px 0;
+
+        font-size: 0.78rem;
+    }
+
+    .data-row code {
+        font-size: 0.72rem;
+    }
+
+    summary {
+        padding: 13px;
+
+        font-size: 0.85rem;
+    }
+
+    .standard {
+        padding: 14px;
+    }
+}
+
+/* =========================================================
+   Responsive — Very Small Screens
+   359px and below
+   ========================================================= */
+
+@media (max-width: 359px) {
     .container {
         width: min(
             calc(100% - 20px),
@@ -1117,19 +1359,106 @@ details[open] summary::after {
         );
     }
 
-    .card {
-        padding: 16px;
-    }
-
-    .mnemonic-grid {
-        grid-template-columns: 1fr;
+    .site-header {
+        padding: 36px 0 32px;
     }
 
     .site-header h1 {
         font-size: 1.75rem;
     }
-}
 
+    .site-header p {
+        font-size: 0.85rem;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .wallet-section {
+        padding: 20px 0;
+    }
+
+    /*
+       A single column gives the recovery phrase enough room
+       on very narrow devices such as 320px phones.
+    */
+    .mnemonic-grid {
+        grid-template-columns: 1fr;
+
+        gap: 7px;
+    }
+
+    .mnemonic-word {
+        min-height: 44px;
+
+        padding: 8px 10px;
+    }
+
+    .mnemonic-number {
+        font-size: 0.68rem;
+    }
+
+    .mnemonic-value {
+        font-size: 0.8rem;
+    }
+
+    .button {
+        min-height: 46px;
+
+        padding-inline: 14px;
+    }
+
+    .danger-box,
+    .warning {
+        padding: 13px 14px;
+
+        font-size: 0.82rem;
+    }
+
+    .security-status {
+        font-size: 0.78rem;
+    }
+
+    .verification {
+        gap: 9px;
+
+        padding: 11px;
+    }
+
+    .verification-icon {
+        width: 26px;
+        height: 26px;
+
+        font-size: 0.8rem;
+    }
+
+    .verification strong {
+        font-size: 0.85rem;
+    }
+
+    .verification p {
+        font-size: 0.75rem;
+    }
+
+    .address {
+        font-size: 0.72rem;
+    }
+
+    .standard {
+        padding: 13px;
+    }
+
+    .form-group select {
+        min-height: 46px;
+
+        padding-left: 10px;
+        padding-right: 34px;
+
+        font-size: 0.82rem;
+    }
+
+}
 
 /* =========================================================
    Accessibility
@@ -1146,7 +1475,6 @@ details[open] summary::after {
         animation-iteration-count: 1 !important;
     }
 }
-
 
 /* =========================================================
    Print
@@ -1193,11 +1521,20 @@ details[open] summary::after {
         border: 1px solid #cccccc;
     }
 
-    /* Always show the recovery phrase on the printed backup */
+    /*
+       Printing must reveal the phrase even if the user
+       currently has the on-screen recovery phrase hidden.
+    */
     .mnemonic-grid.mnemonic-hidden .mnemonic-value {
         filter: none !important;
+
         color: var(--text) !important;
+
         text-shadow: none !important;
+
+        opacity: 1 !important;
+
+        visibility: visible !important;
     }
 
     .address-container {
