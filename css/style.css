@@ -994,6 +994,80 @@ details[open] summary::after {
     margin: 2px 0;
 }
 
+.footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    margin-top: 14px;
+}
+
+.footer-icon-link {
+    display: inline-flex;
+
+    text-decoration: none;
+}
+
+.footer-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    background: #ffffff;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.footer-icon {
+    display: block;
+
+    width: 22px;
+    height: 22px;
+
+    object-fit: contain;
+}
+
+.footer-icon-link:hover .footer-icon-circle {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.footer-icon-link:focus-visible {
+    outline: 3px solid rgba(247, 147, 26, 0.5);
+    outline-offset: 4px;
+    border-radius: 50%;
+}
+
+@media (max-width: 359px) {
+    .footer-links {
+        gap: 12px;
+    }
+
+    .footer-icon-circle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .footer-icon {
+        width: 21px;
+        height: 21px;
+    }
+}
+
+
 
 /* =========================================================
    Responsive — Tablet
