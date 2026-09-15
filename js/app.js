@@ -43,6 +43,7 @@ const WalletApp = (() => {
     cacheElements();
     bindEvents();
     checkBrowserSecurity();
+    loadVersionInfo();
   }
 
   function cacheElements() {
@@ -82,6 +83,39 @@ const WalletApp = (() => {
     elements.printButton.addEventListener("click", printBackup);
     elements.destroyButton.addEventListener("click", destroyWallet);
   }
+
+async function loadVersionInfo() {
+  try {
+    const [githubResponse, packageResponse] = await Promise.all([
+      fetch(
+        "https://api.github.com/repos/B3POio/bitcoin-wallet-generator/commits/main"
+      ),
+      fetch(
+        "https://raw.githubusercontent.com/B3POio/bitcoin-wallet-generator/main/package.json"
+      )
+    ]);
+
+    if (!githubResponse.ok || !packageResponse.ok) {
+      throw new Error("GitHub request failed");
+    }
+
+    const commitData = await githubResponse.json();
+    const packageData = await packageResponse.json();
+
+    const versionElement = document.getElementById("appVersion");
+    const commitElement = document.getElementById("appCommit");
+
+    if (versionElement) {
+      versionElement.textContent = `v${packageData.version}`;
+    }
+
+    if (commitElement) {
+      commitElement.textContent = `commit ${commitData.sha.substring(0, 7)}`;
+    }
+  } catch (error) {
+    console.warn("Could not load version information:", error);
+  }
+}
 
   function checkBrowserSecurity() {
     const cryptoAvailable =
