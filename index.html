@@ -15,59 +15,48 @@
     <meta name="author" content="B3POio">
     <meta name="author:x" content="https://x.com/B3POio">
     <meta name="author:github" content="https://github.com/B3POio">
+    <meta name="referrer" content="no-referrer">
 
-    <script>
-        try {
-            const savedTheme = localStorage.getItem("bitcoin-wallet-theme");
-            const theme = savedTheme === "dark" ? "dark" : "light";
+    <!--
+        Security policy for both hosted and direct file:// use.
+        connect-src 'none' prevents fetch/XHR/WebSocket/EventSource connections.
+        External links remain normal user-initiated navigation.
+    -->
+    <meta
+        http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self' file:; style-src 'self' file:; img-src 'self' file: data:; connect-src 'none'; font-src 'self' file:; object-src 'none'; base-uri 'none'; form-action 'none';"
+    >
 
-            document.documentElement.dataset.theme = theme;
-            document.documentElement.style.colorScheme = theme;
-        } catch (error) {
-            document.documentElement.dataset.theme = "light";
-        }
-    </script>
+    <!-- Local script replaces the previous inline theme initializer. -->
+    <script src="js/theme-init.js"></script>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
     <!-- =====================================================
          NAVBAR
          ===================================================== -->
     <header class="site-header">
-
         <nav class="navbar" aria-label="Main navigation">
-
             <div class="navbar-inner">
 
                 <!-- Brand -->
                 <a
-                    href="/"
+                    href="index.html"
                     class="navbar-brand"
                     aria-label="Bitcoin Wallet Generator"
                 >
-
-                    <div class="brand-icon" aria-hidden="true">
-                        ₿
-                    </div>
+                    <div class="brand-icon" aria-hidden="true">₿</div>
 
                     <div class="brand-text">
-                        <span class="brand-name">
-                            Bitcoin Wallet
-                        </span>
-
-                        <span class="brand-status" data-i18n="online">
-                            ONLINE
-                        </span>
+                        <span class="brand-name">Bitcoin Wallet</span>
+                        <span class="brand-status" data-i18n="online">ONLINE</span>
                     </div>
-
                 </a>
-
 
                 <!-- Navbar controls -->
                 <div class="navbar-actions">
-
                     <!-- Download -->
                     <a
                         href="https://github.com/B3POio/bitcoin-wallet-generator/archive/refs/heads/main.zip"
@@ -91,16 +80,11 @@
                         >
                             <path d="M12 3v12M7 11l5 5 5-5M5 21h14"></path>
                         </svg>
-
-                        <span class="download-label" data-i18n="download">
-                            Download
-                        </span>
+                        <span class="download-label" data-i18n="download">Download</span>
                     </a>
-
 
                     <!-- Bitcoin network -->
                     <div class="network-selector">
-
                         <button
                             type="button"
                             class="nav-control nav-network"
@@ -110,8 +94,6 @@
                             aria-controls="networkDropdown"
                             aria-label="Bitcoin network"
                         >
-
-                            <!-- Header icon -->
                             <svg
                                 class="bitcoin-icon network-icon-mainnet"
                                 id="networkIcon"
@@ -124,12 +106,7 @@
                                 <path class="network-icon-symbol" fill-rule="evenodd" d="M17.288 10.291c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zM14.278 14.511c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zM14.688 10.271c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"></path>
                             </svg>
 
-                            <span
-                                class="network-label"
-                                id="networkLabel"
-                            >
-                                Bitcoin
-                            </span>
+                            <span class="network-label" id="networkLabel">Bitcoin</span>
 
                             <svg
                                 class="nav-chevron"
@@ -145,9 +122,7 @@
                             >
                                 <path d="m6 9 6 6 6-6"></path>
                             </svg>
-
                         </button>
-
 
                         <div
                             class="network-dropdown"
@@ -164,9 +139,6 @@
                                 Network for derivation and checks
                             </p>
 
-                            <!-- =================================================
-                                BITCOIN MAINNET
-                                ================================================= -->
                             <button
                                 type="button"
                                 class="network-option active"
@@ -174,7 +146,6 @@
                                 role="menuitemradio"
                                 aria-checked="true"
                             >
-
                                 <svg
                                     class="bitcoin-icon network-option-icon network-icon-mainnet"
                                     viewBox="0 0 24 24"
@@ -185,26 +156,15 @@
                                     <circle class="network-icon-coin" cx="12" cy="12" r="12"></circle>
                                     <path class="network-icon-symbol" fill-rule="evenodd" d="M17.288 10.291c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zM14.278 14.511c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zM14.688 10.271c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"></path>
                                 </svg>
-
                                 <span class="network-option-copy">
-
-                                    <span class="network-option-name" data-i18n="bitcoin">
-                                        Bitcoin
-                                    </span>
-
+                                    <span class="network-option-name" data-i18n="bitcoin">Bitcoin</span>
                                     <span class="network-option-description">
                                         Real coins · addresses 1…, 3…, bc1q…, bc1p… ·
                                         xpub/ypub/zpub · WIF 5/K/L · coin type 0'
                                     </span>
-
                                 </span>
-
                             </button>
 
-
-                            <!-- =================================================
-                                BITCOIN TESTNET
-                                ================================================= -->
                             <button
                                 type="button"
                                 class="network-option"
@@ -212,7 +172,6 @@
                                 role="menuitemradio"
                                 aria-checked="false"
                             >
-
                                 <svg
                                     class="bitcoin-icon network-option-icon network-icon-testnet"
                                     viewBox="0 0 24 24"
@@ -223,26 +182,15 @@
                                     <circle class="network-icon-coin" cx="12" cy="12" r="12"></circle>
                                     <path class="network-icon-symbol" fill-rule="evenodd" d="M17.288 10.291c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zM14.278 14.511c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zM14.688 10.271c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"></path>
                                 </svg>
-
                                 <span class="network-option-copy">
-
-                                    <span class="network-option-name" data-i18n="testnet">
-                                        Testnet
-                                    </span>
-
+                                    <span class="network-option-name" data-i18n="testnet">Testnet</span>
                                     <span class="network-option-description">
                                         Practice coins, no value · addresses m…/n…, 2…,
                                         tb1q…, tb1p… · tpub/upub/vpub · WIF 9/c · coin type 1'
                                     </span>
-
                                 </span>
-
                             </button>
 
-
-                            <!-- =================================================
-                                BITCOIN SIGNET
-                                ================================================= -->
                             <button
                                 type="button"
                                 class="network-option"
@@ -250,7 +198,6 @@
                                 role="menuitemradio"
                                 aria-checked="false"
                             >
-
                                 <svg
                                     class="bitcoin-icon network-option-icon network-icon-signet"
                                     viewBox="0 0 24 24"
@@ -261,27 +208,15 @@
                                     <circle class="network-icon-coin" cx="12" cy="12" r="12"></circle>
                                     <path class="network-icon-symbol" fill-rule="evenodd" d="M17.288 10.291c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zM14.278 14.511c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zM14.688 10.271c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"></path>
                                 </svg>
-
                                 <span class="network-option-copy">
-
-                                    <span class="network-option-name" data-i18n="signet">
-                                        Signet
-                                    </span>
-
+                                    <span class="network-option-name" data-i18n="signet">Signet</span>
                                     <span class="network-option-description">
-                                        Signed practice coins, no value · same formats as
-                                        testnet · tb1q…, tb1p… · tpub/upub/vpub · WIF 9/c ·
-                                        coin type 1'
+                                        Signed practice coins, no value · same formats as testnet ·
+                                        tb1q…, tb1p… · tpub/upub/vpub · WIF 9/c · coin type 1'
                                     </span>
-
                                 </span>
-
                             </button>
 
-
-                            <!-- =================================================
-                                BITCOIN REGTEST
-                                ================================================= -->
                             <button
                                 type="button"
                                 class="network-option"
@@ -289,7 +224,6 @@
                                 role="menuitemradio"
                                 aria-checked="false"
                             >
-
                                 <svg
                                     class="bitcoin-icon network-option-icon network-icon-regtest"
                                     viewBox="0 0 24 24"
@@ -300,21 +234,13 @@
                                     <circle class="network-icon-coin" cx="12" cy="12" r="12"></circle>
                                     <path class="network-icon-symbol" fill-rule="evenodd" d="M17.288 10.291c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zM14.278 14.511c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zM14.688 10.271c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z"></path>
                                 </svg>
-
                                 <span class="network-option-copy">
-
-                                    <span class="network-option-name" data-i18n="regtest">
-                                        Regtest
-                                    </span>
-
+                                    <span class="network-option-name" data-i18n="regtest">Regtest</span>
                                     <span class="network-option-description">
                                         Local sandbox coins · addresses m…/n…, 2…,
-                                        bcrt1q…, bcrt1p… · tpub/upub/vpub · WIF 9/c ·
-                                        coin type 1'
+                                        bcrt1q…, bcrt1p… · tpub/upub/vpub · WIF 9/c · coin type 1'
                                     </span>
-
                                 </span>
-
                             </button>
 
                             <p class="network-dropdown-note" data-i18n="networkNote">
@@ -322,11 +248,8 @@
                                 the address formats, key versions, and checks the tools run
                                 with. A tool’s own advanced fields can still override it.
                             </p>
-
                         </div>
-
                     </div>
-
 
                     <!-- Language -->
                     <div class="language-selector">
@@ -341,7 +264,6 @@
                             data-i18n-aria-label="language"
                         >
                             <span id="languageLabel">EN</span>
-
                             <svg
                                 class="nav-chevron"
                                 viewBox="0 0 24 24"
@@ -366,9 +288,7 @@
                             data-i18n-aria-label="languageMenu"
                             hidden
                         >
-                            <p class="network-dropdown-title" data-i18n="languageMenu">
-                                Select language
-                            </p>
+                            <p class="network-dropdown-title" data-i18n="languageMenu">Select language</p>
 
                             <button type="button" class="network-option language-option active" data-language="en" role="menuitemradio" aria-checked="true">
                                 <span class="network-option-copy"><span class="network-option-name">English</span></span>
@@ -428,7 +348,6 @@
                             <circle cx="12" cy="12" r="4"></circle>
                             <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
                         </svg>
-
                         <svg
                             class="theme-icon theme-icon-moon"
                             viewBox="0 0 24 24"
@@ -444,205 +363,94 @@
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </button>
-
                 </div>
-
             </div>
-
         </nav>
-
     </header>
-
 
     <!-- =====================================================
          MAIN CONTENT
          ===================================================== -->
     <main class="container">
-
-        <!-- Wallet Generator -->
-        <section
-            class="card"
-            id="generator"
-        >
-
+        <section class="card" id="generator">
             <div class="card-header">
-
-                <h2 data-i18n="createWallet">
-                    Create a New Wallet
-                </h2>
-
+                <h2 data-i18n="createWallet">Create a New Wallet</h2>
                 <p data-i18n="localGeneration">
-                    Your wallet is generated locally.
-                    No private keys or recovery phrases are
-                    sent to a server.
+                    Your wallet is generated locally. No private keys or recovery phrases are sent to a server.
                 </p>
-
             </div>
 
-
             <div class="form-group">
-
-                <label for="network" data-i18n="network">
-                    Network
-                </label>
-
+                <label for="network" data-i18n="network">Network</label>
                 <select id="network">
-
-                    <option value="mainnet" data-i18n="mainnet">
-                        Bitcoin Mainnet
-                    </option>
-
-                    <option value="testnet" data-i18n="testnet">
-                        Bitcoin Testnet
-                    </option>
-
-                    <option value="signet" data-i18n="signet">
-                        Bitcoin Signet
-                    </option>
-
-                    <option value="regtest" data-i18n="regtest">
-                        Bitcoin Regtest
-                    </option>
-
+                    <option value="mainnet" data-i18n="mainnet">Bitcoin Mainnet</option>
+                    <option value="testnet" data-i18n="testnet">Bitcoin Testnet</option>
+                    <option value="signet" data-i18n="signet">Bitcoin Signet</option>
+                    <option value="regtest" data-i18n="regtest">Bitcoin Regtest</option>
                 </select>
-
             </div>
-
 
             <div class="form-group">
-
-                <label for="wordCount" data-i18n="recoveryPhrase">
-                    Recovery Phrase
-                </label>
-
+                <label for="wordCount" data-i18n="recoveryPhrase">Recovery Phrase</label>
                 <select id="wordCount">
-
-                    <option value="12" data-i18n="twelveWords">
-                        12 words
-                    </option>
-
-                    <option value="24" data-i18n="twentyFourWords">
-                        24 words
-                    </option>
-
+                    <option value="12" data-i18n="twelveWords">12 words</option>
+                    <option value="24" data-i18n="twentyFourWords">24 words</option>
                 </select>
-
             </div>
 
-
+            <!-- Disabled until browser checks and the known-vector crypto self-test pass. -->
             <button
                 type="button"
                 id="generateButton"
                 class="button button-primary"
                 data-i18n="generateWallet"
+                disabled
             >
                 Generate New Wallet
             </button>
 
-
-            <div
-                id="securityStatus"
-                class="security-status"
-            >
+            <div id="securityStatus" class="security-status">
                 <span id="securityStatusText" data-i18n="checkingSecurity">
                     Checking browser security...
                 </span>
             </div>
 
-
-            <div
-                id="offlineWarning"
-                class="warning"
-                hidden
-            >
-
-                <strong data-i18n="offlineRecommended">
-                    Offline use recommended
-                </strong>
-
+            <div id="offlineWarning" class="warning" hidden>
+                <strong data-i18n="offlineRecommended">Offline use recommended</strong>
                 <p data-i18n="offlineExplanation">
-                    For wallets containing real funds,
-                    download and verify this application
-                    before disconnecting the computer from
-                    the internet and generating your wallet.
+                    For wallets containing real funds, download and verify this application before disconnecting the computer from the internet and generating your wallet.
                 </p>
-
             </div>
-
         </section>
-
 
         <!-- =================================================
              GENERATED WALLET
              ================================================= -->
-        <section
-            class="card wallet-card"
-            id="walletCard"
-            hidden
-        >
-
+        <section class="card wallet-card" id="walletCard" hidden>
             <div class="card-header wallet-header">
-
                 <div>
-
-                    <h2 data-i18n="yourWallet">
-                        Your Wallet
-                    </h2>
-
+                    <h2 data-i18n="yourWallet">Your Wallet</h2>
                     <p data-i18n="walletBackupInstruction">
-                        Write down your recovery phrase
-                        and store it somewhere secure.
+                        Write down your recovery phrase and store it somewhere secure.
                     </p>
-
                 </div>
-
-                <span
-                    id="networkBadge"
-                    class="network-badge"
-                >
-                    MAINNET
-                </span>
-
+                <span id="networkBadge" class="network-badge">MAINNET</span>
             </div>
 
-
-            <!-- Security Warning -->
             <div class="danger-box">
-
-                <strong data-i18n="neverSharePhrase">
-                    Never share your recovery phrase.
-                </strong>
-
+                <strong data-i18n="neverSharePhrase">Never share your recovery phrase.</strong>
                 <p data-i18n="phraseDanger">
-                    Anyone who has your recovery phrase can
-                    control the Bitcoin in this wallet.
-                    We will never ask you to enter it into
-                    a website.
+                    Anyone who has your recovery phrase can control the Bitcoin in this wallet. We will never ask you to enter it into a website.
                 </p>
-
             </div>
 
-
-            <!-- Recovery Phrase -->
             <section class="wallet-section">
-
                 <div class="section-header">
-
                     <div>
-
-                        <h3 data-i18n="recoveryPhrase">
-                            Recovery Phrase
-                        </h3>
-
-                        <p data-i18n="phraseBackup">
-                            Your recovery phrase is the
-                            backup for this wallet.
-                        </p>
-
+                        <h3 data-i18n="recoveryPhrase">Recovery Phrase</h3>
+                        <p data-i18n="phraseBackup">Your recovery phrase is the backup for this wallet.</p>
                     </div>
-
                 </div>
-
 
                 <div
                     id="mnemonicGrid"
@@ -650,9 +458,7 @@
                     aria-label="Bitcoin wallet recovery phrase"
                 ></div>
 
-
                 <div class="button-row">
-
                     <button
                         type="button"
                         id="toggleMnemonicButton"
@@ -661,7 +467,6 @@
                     >
                         Hide Recovery Phrase
                     </button>
-
                     <button
                         type="button"
                         id="copyMnemonicButton"
@@ -670,40 +475,21 @@
                     >
                         Copy Recovery Phrase
                     </button>
-
                 </div>
-
             </section>
 
-
-            <!-- Receiving Address -->
             <section class="wallet-section">
-
                 <div class="section-header">
-
                     <div>
-
-                        <h3 data-i18n="receivingAddress">
-                            First Receiving Address
-                        </h3>
-
+                        <h3 data-i18n="receivingAddress">First Receiving Address</h3>
                         <p data-i18n="receivingAddressDescription">
-                            This is your first native SegWit
-                            Bitcoin receiving address.
+                            This is your first native SegWit Bitcoin receiving address.
                         </p>
-
                     </div>
-
                 </div>
 
-
                 <div class="address-container">
-
-                    <code
-                        id="address"
-                        class="address"
-                    ></code>
-
+                    <code id="address" class="address"></code>
                     <button
                         type="button"
                         id="copyAddressButton"
@@ -712,122 +498,58 @@
                     >
                         Copy Address
                     </button>
-
                 </div>
-
 
                 <div class="derivation-info">
-
-                    <span data-i18n="derivationPath">
-                        Derivation path
-                    </span>
-
+                    <span data-i18n="derivationPath">Derivation path</span>
                     <code id="derivationPath"></code>
-
                 </div>
-
             </section>
 
-
-            <!-- Wallet Verification -->
-            <section class="wallet-section">
-
+            <!--
+                This remains wired to the existing i18n keys for this first test build.
+                The logic now performs a consistency re-derivation but does not claim
+                a separate cryptographic implementation.
+            -->
+            <section class="wallet-section" id="verificationCard" hidden>
                 <div class="verification">
-
-                    <div
-                        class="verification-icon"
-                        aria-hidden="true"
-                    >
-                        ✓
-                    </div>
-
+                    <div class="verification-icon" aria-hidden="true">✓</div>
                     <div>
-
-                        <strong data-i18n="walletVerified">
-                            Wallet verified
-                        </strong>
-
+                        <strong data-i18n="walletVerified">Wallet verified</strong>
                         <p data-i18n="verificationDescription">
-                            The generated recovery phrase
-                            was used to independently derive
-                            this wallet's address.
+                            The generated recovery phrase was used to independently derive this wallet's address.
                         </p>
-
                     </div>
-
                 </div>
-
             </section>
 
-
-            <!-- Advanced Information -->
             <section class="wallet-section">
-
                 <details>
-
-                    <summary data-i18n="advancedInformation">
-                        Advanced Wallet Information
-                    </summary>
-
+                    <summary data-i18n="advancedInformation">Advanced Wallet Information</summary>
                     <div class="advanced-information">
-
                         <div class="data-row">
-
-                            <span data-i18n="masterFingerprint">
-                                Master Fingerprint
-                            </span>
-
+                            <span data-i18n="masterFingerprint">Master Fingerprint</span>
                             <code id="fingerprint"></code>
-
                         </div>
-
-
                         <div class="data-row">
-
-                            <span data-i18n="extendedPublicKey">
-                                Account Extended Public Key
-                            </span>
-
+                            <span data-i18n="extendedPublicKey">Account Extended Public Key</span>
                             <code id="xpub"></code>
-
                         </div>
-
-
                         <div class="data-row">
-
-                            <span data-i18n="derivationStandard">
-                                Derivation Standard
-                            </span>
-
-                            <code>
-                                BIP84
-                            </code>
-
+                            <span data-i18n="derivationStandard">Derivation Standard</span>
+                            <code>BIP84</code>
                         </div>
-
                     </div>
-
                 </details>
-
             </section>
 
-
-            <!-- Backup / Print -->
             <section class="wallet-section backup-section">
-
-                <h3 data-i18n="backup">
-                    Backup
-                </h3>
-
+                <h3 data-i18n="backup">Backup</h3>
                 <p data-i18n="backupDescription">
-                    Store your recovery phrase securely
-                    before destroying this wallet from
-                    the browser.
+                    Store your recovery phrase securely before destroying this wallet from the browser.
                 </p>
 
-
                 <div class="button-row">
-
                     <button
                         type="button"
                         id="printButton"
@@ -836,7 +558,6 @@
                     >
                         Print Backup
                     </button>
-
                     <button
                         type="button"
                         id="destroyButton"
@@ -845,158 +566,105 @@
                     >
                         Destroy Wallet
                     </button>
-
                 </div>
-
             </section>
-
         </section>
-
 
         <!-- =================================================
              INFORMATION
              ================================================= -->
         <section class="card information-card">
-
-            <h2 data-i18n="aboutGenerator">
-                About This Generator
-            </h2>
-
+            <h2 data-i18n="aboutGenerator">About This Generator</h2>
             <p data-i18n="aboutDescription">
-                This application generates a deterministic
-                Bitcoin wallet using established Bitcoin
-                wallet standards.
+                This application generates a deterministic Bitcoin wallet using established Bitcoin wallet standards.
             </p>
 
-
             <div class="standards">
-
                 <div class="standard">
-
-                    <strong>
-                        BIP39
-                    </strong>
-
-                    <span data-i18n="recoveryPhrase">
-                        Recovery phrase
-                    </span>
-
+                    <strong>BIP39</strong>
+                    <span data-i18n="recoveryPhrase">Recovery phrase</span>
                 </div>
-
-
                 <div class="standard">
-
-                    <strong>
-                        BIP32
-                    </strong>
-
-                    <span data-i18n="hierarchicalKeys">
-                        Hierarchical deterministic keys
-                    </span>
-
+                    <strong>BIP32</strong>
+                    <span data-i18n="hierarchicalKeys">Hierarchical deterministic keys</span>
                 </div>
-
-
                 <div class="standard">
-
-                    <strong>
-                        BIP84
-                    </strong>
-
-                    <span data-i18n="nativeSegwit">
-                        Native SegWit addresses
-                    </span>
-
+                    <strong>BIP84</strong>
+                    <span data-i18n="nativeSegwit">Native SegWit addresses</span>
                 </div>
-
             </div>
-
 
             <div class="warning">
-
-                <strong data-i18n="important">
-                    Important
-                </strong>
-
+                <strong data-i18n="important">Important</strong>
                 <p data-i18n="auditWarning">
-                    This software has not been independently
-                    audited. Do not use it with significant
-                    funds until the implementation,
-                    dependencies, and generated wallets have
-                    been thoroughly verified.
+                    This software has not been independently audited. Do not use it with significant funds until the implementation, dependencies, and generated wallets have been thoroughly verified.
                 </p>
-
             </div>
-
         </section>
-
     </main>
-
 
     <!-- =====================================================
          FOOTER
          ===================================================== -->
-            <footer class="site-footer">
-                <div class="container">
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-meta" aria-label="Project information">
+                <span class="footer-meta-label" data-i18n="sinceBlock">SINCE BLOCK</span>
+                <span class="footer-meta-value">966185</span>
 
-                    <div class="footer-meta" aria-label="Project information">
-                        <span class="footer-meta-label" data-i18n="sinceBlock">SINCE BLOCK</span>
-                        <span class="footer-meta-value">966185</span>
+                <span class="footer-divider">|</span>
 
-                        <span class="footer-divider">|</span>
+                <span class="footer-meta-label" data-i18n="version">VERSION</span>
+                <span id="appVersion" class="footer-meta-value">v—</span>
 
-                        <span class="footer-meta-label" data-i18n="version">VERSION</span>
-                        <span id="appVersion" class="footer-meta-value">v—</span>
+                <span class="footer-divider">|</span>
 
-                        <span class="footer-divider">|</span>
+                <span id="commitMeta" hidden>
+                    <span class="footer-divider">|</span>
+                    <span class="footer-meta-label">COMMIT</span>
+                    <span id="appCommit" class="footer-meta-value"></span>
+                </span>
 
-                        <span class="footer-meta-label" data-i18n="commit">COMMIT</span>
-                        <span id="appCommit" class="footer-meta-value">—</span>
-                    </div>
+                <span id="hashMeta" hidden>
+                    <span class="footer-divider">|</span>
+                    <span class="footer-meta-label">SHA-256</span>
+                    <span id="appReleaseHash" class="footer-meta-value"></span>
+                </span>
+            </div>
 
-                    <div class="footer-links">
+            <div class="footer-links">
+                <a
+                    href="https://github.com/B3POio/bitcoin-wallet-generator"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Bitcoin Wallet Generator on GitHub"
+                    class="footer-icon-link"
+                >
+                    <span class="footer-icon-box">
+                        <img src="assets/github.svg" alt="" class="footer-icon">
+                    </span>
+                </a>
 
-                        <a
-                            href="https://github.com/B3POio/bitcoin-wallet-generator"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Bitcoin Wallet Generator on GitHub"
-                            class="footer-icon-link"
-                        >
-                            <span class="footer-icon-box">
-                                <img
-                                    src="https://cdn.simpleicons.org/github"
-                                    alt=""
-                                    class="footer-icon"
-                                >
-                            </span>
-                        </a>
+                <a
+                    href="https://bitcoin.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Bitcoin.org"
+                    class="footer-icon-link"
+                >
+                    <span class="footer-icon-box">
+                        <img src="assets/bitcoin.svg" alt="" class="footer-icon">
+                    </span>
+                </a>
+            </div>
+        </div>
+    </footer>
 
-                        <a
-                            href="https://bitcoin.org/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Bitcoin.org"
-                            class="footer-icon-link"
-                        >
-                            <span class="footer-icon-box">
-                                <img
-                                    src="https://cdn.simpleicons.org/bitcoin"
-                                    alt=""
-                                    class="footer-icon"
-                                >
-                            </span>
-                        </a>
+    <!-- Static build/release metadata. No network request is made. -->
+    <script src="js/release-info.js"></script>
 
-                    </div>
-
-                </div>
-            </footer>
-
-
-    <!-- Application -->
+    <!-- Application bundle generated from js/app.js and js/i18n.js. -->
     <script src="js/app.bundle.js"></script>
-
 </body>
 
 </html>
