@@ -1344,31 +1344,34 @@ details[open] summary::after {
 /* Metadata row */
 
 .footer-meta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px 10px;
+    max-width: 100%;
+}
 
-  gap: 7px;
+.footer-meta-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    min-width: 0;
+}
 
-  font-family:
-    "SFMono-Regular",
-    Consolas,
-    "Liberation Mono",
-    Menlo,
-    monospace;
+.footer-meta-item + .footer-meta-item::before {
+    content: "|";
+    margin-right: 6px;
+    color: #667085;
+}
 
-  font-size: 0.72rem;
+.footer-meta-hash {
+    max-width: 100%;
+}
 
-  font-weight: 600;
-
-  letter-spacing: 0.06em;
-
-  line-height: 1.6;
-
-  color: var(--chrome-footer-text);
-
-  text-transform: uppercase;
+#appReleaseHash {
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 
@@ -1820,14 +1823,36 @@ details[open] summary::after {
     padding: 28px 16px 32px;
   }
 
-  .footer-meta {
-    gap: 6px;
-
-    font-size: 0.62rem;
-  }
-
   .footer-links {
     margin-top: 18px;
+  }
+
+  .footer-meta {
+    gap: 4px;
+    font-size: 0.58rem;
+    letter-spacing: 0;
+  }
+
+  .footer-meta-label {
+    letter-spacing: 0;
+  }
+
+  .footer-meta-value {
+    letter-spacing: 0;
+  }
+
+  .footer-manifest {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  #appReleaseHash {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-all;
   }
 
   .container {
