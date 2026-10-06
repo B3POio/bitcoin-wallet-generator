@@ -11,14 +11,12 @@ cd "$ROOT"
 echo "Bitcoin Wallet Generator ${TAG}"
 echo
 
-# Refuse to run with uncommitted changes.
 if [ -n "$(git status --porcelain)" ]; then
   echo "ERROR: Working tree is not clean."
   echo "Commit, stash, or discard changes first."
   exit 1
 fi
 
-# Must run from main.
 BRANCH="$(git branch --show-current)"
 
 if [ "$BRANCH" != "main" ]; then
@@ -37,7 +35,11 @@ echo "Version:       ${VERSION}"
 echo "Source commit: ${COMMIT}"
 echo
 
-RELEASE_DIR="../bitcoin-wallet-generator-${TAG}-release"
+PARENT_DIR="$(dirname "$ROOT")"
+RELEASE_NAME="bitcoin-wallet-generator-${TAG}-release"
+RELEASE_DIR="${PARENT_DIR}/${RELEASE_NAME}"
+ZIP_NAME="bitcoin-wallet-generator-${TAG}.zip"
+ZIP_PATH="${PARENT_DIR}/${ZIP_NAME}"
 
 if [ -e "$RELEASE_DIR" ]; then
   echo "ERROR: ${RELEASE_DIR} already exists."
@@ -45,9 +47,14 @@ if [ -e "$RELEASE_DIR" ]; then
   exit 1
 fi
 
+if [ -e "$ZIP_PATH" ]; then
+  echo "ERROR: ${ZIP_PATH} already exists."
+  echo "Remove or rename it before continuing."
+  exit 1
+fi
+
 mkdir "$RELEASE_DIR"
 
-# Export only tracked files from the exact commit.
 git archive "$COMMIT" | tar -x -C "$RELEASE_DIR"
 
 cd "$RELEASE_DIR"
@@ -92,6 +99,47 @@ echo "RELEASE.json SHA-256:"
 echo "$MANIFEST_SHA"
 
 echo
+echo "Generating SHA256SUMS..."
+
+find . \
+  -type f \
+  ! -name "SHA256SUMS" \
+  ! -path "./node_modules/*" \
+  ! -path "./.DS_Store" \
+  -print0 \
+  | sort -z \
+  | xargs -0 shasum -a 256 \
+  > SHA256SUMS
+
+SHA256SUMS_SHA="$(
+  shasum -a 256 SHA256SUMS |
+  awk '{print $1}'
+)"
+
+echo
+echo "SHA256SUMS SHA-256:"
+echo "$SHA256SUMS_SHA"
+
+echo
+echo "Creating release ZIP..."
+
+cd "$PARENT_DIR"
+
+zip -r "$ZIP_NAME" "$RELEASE_NAME" \
+  -x "*.DS_Store" \
+  -x "*/node_modules/*" \
+  >/dev/null
+
+ZIP_SHA="$(
+  shasum -a 256 "$ZIP_NAME" |
+  awk '{print $1}'
+)"
+
+echo
+echo "ZIP SHA-256:"
+echo "$ZIP_SHA"
+
+echo
 echo "Release info values:"
 echo "version:        ${VERSION}"
 echo "commit:         ${COMMIT}"
@@ -99,24 +147,17 @@ echo "commitShort:    ${SHORT_COMMIT}"
 echo "manifestSha256: ${MANIFEST_SHA}"
 
 echo
-echo "Generating SHA256SUMS..."
-
-find . \
-  -type f \
-  ! -name "SHA256SUMS" \
-  ! -path "./.DS_Store" \
-  -print0 \
-  | sort -z \
-  | xargs -0 shasum -a 256 \
-  > SHA256SUMS
-
-echo
-echo "SHA256SUMS SHA-256:"
-shasum -a 256 SHA256SUMS
+echo "Release artifact checksums:"
+echo "${SHA256SUMS_SHA}  SHA256SUMS"
+echo "${ZIP_SHA}  ${ZIP_NAME}"
 
 echo
 echo "Release staging directory:"
-echo "$(pwd)"
+echo "$RELEASE_DIR"
+
+echo
+echo "Release ZIP:"
+echo "$ZIP_PATH"
 
 echo
 echo "DONE."
