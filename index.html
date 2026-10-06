@@ -604,6 +604,233 @@
     </main>
 
     <!-- =====================================================
+     APPLICATION DIALOG
+     ===================================================== -->
+    <dialog
+        id="appDialog"
+        class="app-dialog"
+        aria-labelledby="appDialogTitle"
+        aria-describedby="appDialogMessage"
+    >
+        <div class="dialog-card">
+            <div class="dialog-header">
+                <h2 id="appDialogTitle">Notice</h2>
+
+                <button
+                    type="button"
+                    id="appDialogClose"
+                    class="dialog-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+            </div>
+
+            <p
+                id="appDialogMessage"
+                class="dialog-message"
+            ></p>
+
+            <div class="dialog-actions">
+                <button
+                    type="button"
+                    id="appDialogCancel"
+                    class="button"
+                    hidden
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    id="appDialogConfirm"
+                    class="button button-primary"
+                >
+                    OK
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+
+    <!-- =====================================================
+        BACKUP VERIFICATION DIALOG
+        ===================================================== -->
+    <dialog
+        id="backupVerificationDialog"
+        class="app-dialog backup-verification-dialog"
+        aria-labelledby="backupVerificationTitle"
+    >
+        <div class="dialog-card">
+
+            <div class="dialog-header">
+                <div>
+                    <span class="dialog-eyebrow">
+                        Recovery phrase verification
+                    </span>
+
+                    <h2 id="backupVerificationTitle">
+                        Verify Your Backup
+                    </h2>
+                </div>
+
+                <button
+                    type="button"
+                    id="backupVerificationClose"
+                    class="dialog-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+            </div>
+
+
+            <!-- Recovery phrase challenge -->
+            <section id="backupChallengeStep">
+
+                <p class="dialog-message">
+                    Your recovery phrase is now hidden.
+                    Enter the requested words from the backup you wrote down.
+                </p>
+
+                <div
+                    id="backupChallengeFields"
+                    class="backup-challenge-fields"
+                ></div>
+
+                <p
+                    id="backupChallengeError"
+                    class="dialog-error"
+                    role="alert"
+                    hidden
+                >
+                    Backup verification failed.
+                    Check your written recovery phrase and try again.
+                </p>
+
+                <div class="dialog-actions">
+
+                    <button
+                        type="button"
+                        id="backupChallengeCancel"
+                        class="button"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="backupChallengeContinue"
+                        class="button button-primary"
+                    >
+                        Verify Words
+                    </button>
+
+                </div>
+            </section>
+
+
+            <!-- Security acknowledgement -->
+            <section
+                id="backupAcknowledgementStep"
+                hidden
+            >
+
+                <p class="dialog-message">
+                    Your recovery phrase backup has been verified.
+                    Confirm each statement before clearing the wallet
+                    from this browser.
+                </p>
+
+                <div class="backup-acknowledgements">
+
+                    <button
+                        type="button"
+                        class="backup-acknowledgement"
+                        aria-pressed="false"
+                    >
+                        <span
+                            class="acknowledgement-check"
+                            aria-hidden="true"
+                        >
+                            ✓
+                        </span>
+
+                        <span>
+                            I understand that my recovery phrase
+                            is the backup for this wallet.
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="backup-acknowledgement"
+                        aria-pressed="false"
+                    >
+                        <span
+                            class="acknowledgement-check"
+                            aria-hidden="true"
+                        >
+                            ✓
+                        </span>
+
+                        <span>
+                            I understand that anyone with my
+                            recovery phrase can control the
+                            Bitcoin in this wallet.
+                        </span>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="backup-acknowledgement"
+                        aria-pressed="false"
+                    >
+                        <span
+                            class="acknowledgement-check"
+                            aria-hidden="true"
+                        >
+                            ✓
+                        </span>
+
+                        <span>
+                            I understand that if I lose my
+                            recovery phrase, this application
+                            cannot recover my wallet.
+                        </span>
+                    </button>
+
+                </div>
+
+
+                <div class="dialog-actions">
+
+                    <button
+                        type="button"
+                        id="backupAcknowledgementCancel"
+                        class="button"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="backupClearWalletButton"
+                        class="button button-danger"
+                        disabled
+                    >
+                        Clear Wallet Data
+                    </button>
+
+                </div>
+            </section>
+
+        </div>
+    </dialog>
+
+    <!-- =====================================================
          FOOTER
          ===================================================== -->
     <footer class="site-footer">
