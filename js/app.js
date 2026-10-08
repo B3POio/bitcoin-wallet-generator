@@ -96,6 +96,79 @@ const WalletApp = (() => {
       "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
   });
 
+  const SENSITIVE_ACTIONS = Object.freeze({
+    startup: {
+      warning: {
+        eyebrow: "Wallet Generator Safety",
+        title: "Use This Wallet Generator Safely",
+        message:
+          "This application handles Bitcoin recovery phrases. Follow these precautions before generating a wallet.",
+        confirmLabel: "I Understand — Continue",
+        required: true,
+        items: [
+          "Do not generate a wallet on the hosted website or while connected to the internet. Download the release and verify its published checksums first.",
+          "For best security, move the verified files to a USB drive or other medium and use them on an offline or dedicated air-gapped computer.",
+          "Write the recovery phrase down by hand and keep it offline. Do not photograph, email, upload, or store it in the cloud. Copying and printing are provided for accessibility and convenience but can expose the recovery phrase."
+        ]
+      }
+    },
+    copy: {
+      warning: {
+        eyebrow: "Recovery phrase security",
+        title: "Before You Copy",
+        message:
+          "Copying your recovery phrase places sensitive wallet data on the system clipboard.",
+        confirmLabel: "Acknowledge",
+        items: [
+          "I understand that other applications or browser extensions may be able to read clipboard contents.",
+          "I understand that my recovery phrase may remain in clipboard history after I leave this page.",
+          "I will not paste my recovery phrase into websites, chats, email, cloud documents, or other untrusted applications."
+        ]
+      },
+
+      bestPractices: {
+        eyebrow: "Security best practices",
+        title: "Copy Safely",
+        message:
+          "Confirm these precautions before copying your recovery phrase.",
+        confirmLabel: "Copy Recovery Phrase",
+        items: [
+          "I am using a trusted device and, when possible, an offline environment.",
+          "I will clear or overwrite the clipboard as soon as I am finished using the recovery phrase.",
+          "I will keep my recovery phrase private and store the permanent backup offline in a secure location."
+        ]
+      }
+    },
+
+    print: {
+      warning: {
+        eyebrow: "Recovery phrase security",
+        title: "Before You Print",
+        message:
+          "Printing a recovery phrase can expose wallet secrets through the printer, print queue, or surrounding environment.",
+        confirmLabel: "Acknowledge",
+        items: [
+          "I understand that printers and operating systems may retain print jobs or temporary copies.",
+          "I understand that network or cloud-connected printers may transmit the recovery phrase beyond this device.",
+          "I will only print this recovery phrase using a printer and environment that I trust."
+        ]
+      },
+
+      bestPractices: {
+        eyebrow: "Security best practices",
+        title: "Print Safely",
+        message:
+          "Confirm these precautions before printing your wallet backup.",
+        confirmLabel: "Print Backup",
+        items: [
+          "I will use a local or directly connected printer whenever possible and avoid cloud printing services.",
+          "I will protect the printed recovery phrase from cameras, other people, and unattended access.",
+          "I will store the printed backup securely and will not scan, photograph, or upload it to cloud storage."
+        ]
+      }
+    }
+  });
+
   const state = {
     wallet: null,
     mnemonicVisible: true,
@@ -107,6 +180,7 @@ const WalletApp = (() => {
   };
 
   const elements = {};
+
   const THEME_STORAGE_KEY = "bitcoin-wallet-theme";
   const THEMES = new Set(["light", "dark"]);
 
@@ -114,7 +188,7 @@ const WalletApp = (() => {
      INITIALIZATION
      ========================================================= */
 
-  function init() {
+  async function init() {
     cacheElements();
 
     if (elements.generateButton) {
@@ -129,9 +203,24 @@ const WalletApp = (() => {
     const browserSecurityPassed = checkBrowserSecurity();
     const cryptographicSelfTestPassed = runCryptographicSelfTest();
 
-    state.cryptographicSelfTestPassed = cryptographicSelfTestPassed;
+    state.cryptographicSelfTestPassed =
+      cryptographicSelfTestPassed;
+
+    if (
+      !browserSecurityPassed ||
+      !cryptographicSelfTestPassed
+    ) {
+      elements.generateButton.disabled = true;
+      return;
+    }
+
+    const startupAcknowledged =
+      await showSecurityAcknowledgement(
+        SENSITIVE_ACTIONS.startup.warning
+      );
+
     elements.generateButton.disabled =
-      !(browserSecurityPassed && cryptographicSelfTestPassed);
+      !startupAcknowledged;
   }
 
   /* =========================================================
@@ -175,6 +264,23 @@ const WalletApp = (() => {
     elements.appDialogCancel = document.getElementById("appDialogCancel");
     elements.appDialogConfirm = document.getElementById("appDialogConfirm");
 
+    elements.securityAcknowledgementDialog =
+      document.getElementById("securityAcknowledgementDialog");
+    elements.securityAcknowledgementEyebrow =
+      document.getElementById("securityAcknowledgementEyebrow");
+    elements.securityAcknowledgementTitle =
+      document.getElementById("securityAcknowledgementTitle");
+    elements.securityAcknowledgementMessage =
+      document.getElementById("securityAcknowledgementMessage");
+    elements.securityAcknowledgementItems =
+      document.getElementById("securityAcknowledgementItems");
+    elements.securityAcknowledgementClose =
+      document.getElementById("securityAcknowledgementClose");
+    elements.securityAcknowledgementCancel =
+      document.getElementById("securityAcknowledgementCancel");
+    elements.securityAcknowledgementContinue =
+      document.getElementById("securityAcknowledgementContinue");
+
     elements.backupVerificationDialog =
       document.getElementById("backupVerificationDialog");
     elements.backupVerificationClose =
@@ -217,14 +323,31 @@ const WalletApp = (() => {
 
   function bindEvents() {
     elements.generateButton.addEventListener("click", generateWallet);
+
     elements.toggleMnemonicButton.addEventListener(
       "click",
       toggleMnemonicVisibility
     );
-    elements.copyMnemonicButton.addEventListener("click", copyMnemonic);
-    elements.copyAddressButton.addEventListener("click", copyAddress);
-    elements.printButton.addEventListener("click", printBackup);
-    elements.destroyButton.addEventListener("click", clearWalletData);
+
+    elements.copyMnemonicButton.addEventListener(
+      "click",
+      copyMnemonic
+    );
+
+    elements.copyAddressButton.addEventListener(
+      "click",
+      copyAddress
+    );
+
+    elements.printButton.addEventListener(
+      "click",
+      printBackup
+    );
+
+    elements.destroyButton.addEventListener(
+      "click",
+      clearWalletData
+    );
 
     elements.backupVerificationClose?.addEventListener(
       "click",
@@ -465,7 +588,8 @@ const WalletApp = (() => {
   }
 
   function moveNetworkFocus(currentOption, direction) {
-    const currentIndex = elements.networkOptions.indexOf(currentOption);
+    const currentIndex =
+      elements.networkOptions.indexOf(currentOption);
 
     if (
       currentIndex < 0 ||
@@ -624,21 +748,27 @@ const WalletApp = (() => {
         throw new Error("BIP39 mnemonic validation failed.");
       }
 
-      seed = bip39.mnemonicToSeedSync(BIP84_SELF_TEST.mnemonic);
+      seed = bip39.mnemonicToSeedSync(
+        BIP84_SELF_TEST.mnemonic
+      );
 
       root = bip32.fromSeed(
         seed,
         bitcoin.networks.bitcoin
       );
 
-      receivingNode = root.derivePath(BIP84_SELF_TEST.path);
+      receivingNode = root.derivePath(
+        BIP84_SELF_TEST.path
+      );
 
-      const publicKeyHex = bytesToHex(receivingNode.publicKey);
+      const publicKeyHex =
+        bytesToHex(receivingNode.publicKey);
 
-      const payment = bitcoin.payments.p2wpkh({
-        pubkey: receivingNode.publicKey,
-        network: bitcoin.networks.bitcoin
-      });
+      const payment =
+        bitcoin.payments.p2wpkh({
+          pubkey: receivingNode.publicKey,
+          network: bitcoin.networks.bitcoin
+        });
 
       if (publicKeyHex !== BIP84_SELF_TEST.publicKey) {
         throw new Error(
@@ -758,7 +888,8 @@ const WalletApp = (() => {
       }
 
       elements.generateButton.disabled = true;
-      elements.generateButton.textContent = translate("generating");
+      elements.generateButton.textContent =
+        translate("generating");
 
       clearWallet();
 
@@ -771,8 +902,11 @@ const WalletApp = (() => {
         );
       }
 
-      const wordCount = Number(elements.wordCount.value);
-      const entropyBits = CONFIG.entropy[wordCount];
+      const wordCount =
+        Number(elements.wordCount.value);
+
+      const entropyBits =
+        CONFIG.entropy[wordCount];
 
       if (!entropyBits) {
         throw new Error(
@@ -782,7 +916,8 @@ const WalletApp = (() => {
 
       entropy = generateEntropy(entropyBits);
 
-      const mnemonic = bip39.entropyToMnemonic(entropy);
+      const mnemonic =
+        bip39.entropyToMnemonic(entropy);
 
       if (!bip39.validateMnemonic(mnemonic)) {
         throw new Error(
@@ -790,7 +925,8 @@ const WalletApp = (() => {
         );
       }
 
-      seed = bip39.mnemonicToSeedSync(mnemonic);
+      seed =
+        bip39.mnemonicToSeedSync(mnemonic);
 
       root = bip32.fromSeed(
         seed,
@@ -803,7 +939,8 @@ const WalletApp = (() => {
       const addressPath =
         `${accountPath}/0/0`;
 
-      receivingNode = root.derivePath(addressPath);
+      receivingNode =
+        root.derivePath(addressPath);
 
       if (!receivingNode.privateKey) {
         throw new Error(
@@ -811,10 +948,11 @@ const WalletApp = (() => {
         );
       }
 
-      const payment = bitcoin.payments.p2wpkh({
-        pubkey: receivingNode.publicKey,
-        network: networkConfig.network
-      });
+      const payment =
+        bitcoin.payments.p2wpkh({
+          pubkey: receivingNode.publicKey,
+          network: networkConfig.network
+        });
 
       if (!payment.address) {
         throw new Error(
@@ -822,13 +960,20 @@ const WalletApp = (() => {
         );
       }
 
-      account = root.derivePath(accountPath);
+      account =
+        root.derivePath(accountPath);
 
-      const accountPublicKey = account.neutered();
-      const xpub = accountPublicKey.toBase58();
+      const accountPublicKey =
+        account.neutered();
 
-      const publicKey = Buffer.from(receivingNode.publicKey);
-      const fingerprint = Buffer.from(root.fingerprint);
+      const xpub =
+        accountPublicKey.toBase58();
+
+      const publicKey =
+        Buffer.from(receivingNode.publicKey);
+
+      const fingerprint =
+        Buffer.from(root.fingerprint);
 
       state.wallet = {
         networkKey,
@@ -899,7 +1044,8 @@ const WalletApp = (() => {
     renderMnemonic(wallet.mnemonic);
 
     elements.address.textContent = wallet.address;
-    elements.derivationPath.textContent = wallet.addressPath;
+    elements.derivationPath.textContent =
+      wallet.addressPath;
     elements.fingerprint.textContent =
       bytesToHex(wallet.fingerprint);
     elements.xpub.textContent = wallet.xpub;
@@ -913,19 +1059,26 @@ const WalletApp = (() => {
   }
 
   function renderMnemonic(mnemonic) {
-    const words = mnemonic.trim().split(/\s+/);
+    const words =
+      mnemonic.trim().split(/\s+/);
 
     elements.mnemonicGrid.innerHTML = "";
 
     words.forEach((word, index) => {
-      const item = document.createElement("div");
+      const item =
+        document.createElement("div");
+
       item.className = "mnemonic-word";
 
-      const number = document.createElement("span");
+      const number =
+        document.createElement("span");
+
       number.className = "mnemonic-number";
       number.textContent = String(index + 1);
 
-      const value = document.createElement("span");
+      const value =
+        document.createElement("span");
+
       value.className = "mnemonic-value";
       value.textContent = word;
 
@@ -954,7 +1107,8 @@ const WalletApp = (() => {
   function toggleMnemonicVisibility() {
     if (!state.wallet) return;
 
-    state.mnemonicVisible = !state.mnemonicVisible;
+    state.mnemonicVisible =
+      !state.mnemonicVisible;
 
     elements.mnemonicGrid.classList.toggle(
       "mnemonic-hidden",
@@ -1088,20 +1242,233 @@ const WalletApp = (() => {
     });
   }
 
-  function showConfirmDialog({
-    title,
-    message,
-    confirmLabel,
-    cancelLabel = "Cancel",
-    danger = false
-  }) {
-    return showDialog({
+  /* =========================================================
+     SECURITY ACKNOWLEDGEMENT DIALOG
+     ========================================================= */
+
+    function showSecurityAcknowledgement({
+      eyebrow,
       title,
       message,
       confirmLabel,
-      cancelLabel,
-      danger
+      items,
+      required = false
+    }) {
+    return new Promise((resolve) => {
+      const dialog =
+        elements.securityAcknowledgementDialog;
+
+      if (
+        !dialog ||
+        typeof dialog.showModal !== "function"
+      ) {
+        console.error(
+          "Security acknowledgement dialog is unavailable."
+        );
+
+        resolve(false);
+        return;
+      }
+
+      elements.securityAcknowledgementEyebrow.textContent =
+        eyebrow;
+
+      elements.securityAcknowledgementTitle.textContent =
+        title;
+
+      elements.securityAcknowledgementMessage.textContent =
+        message;
+
+      elements.securityAcknowledgementContinue.textContent =
+        confirmLabel;
+
+      elements.securityAcknowledgementClose.hidden =
+        required;
+
+      elements.securityAcknowledgementCancel.hidden =
+        required;
+
+      elements.securityAcknowledgementContinue.disabled =
+  true;
+
+      elements.securityAcknowledgementContinue.disabled =
+        true;
+
+      elements.securityAcknowledgementItems.replaceChildren();
+
+      const acknowledgements = items.map((text) => {
+        const button =
+          document.createElement("button");
+
+        const check =
+          document.createElement("span");
+
+        const copy =
+          document.createElement("span");
+
+        button.type = "button";
+        button.className =
+          "security-acknowledgement";
+        button.setAttribute(
+          "aria-pressed",
+          "false"
+        );
+
+        check.className =
+          "acknowledgement-check";
+        check.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+        check.textContent = "✓";
+
+        copy.textContent = text;
+
+        button.appendChild(check);
+        button.appendChild(copy);
+
+        button.addEventListener(
+          "click",
+          () => {
+            const selected =
+              button.getAttribute("aria-pressed") ===
+              "true";
+
+            button.setAttribute(
+              "aria-pressed",
+              String(!selected)
+            );
+
+            button.classList.toggle(
+              "is-confirmed",
+              !selected
+            );
+
+            const allConfirmed =
+              acknowledgements.every(
+                (item) =>
+                  item.getAttribute("aria-pressed") ===
+                  "true"
+              );
+
+            elements.securityAcknowledgementContinue.disabled =
+              !allConfirmed;
+          }
+        );
+
+        elements.securityAcknowledgementItems.appendChild(
+          button
+        );
+
+        return button;
+      });
+
+      let settled = false;
+
+      const finish = (result) => {
+        if (settled) return;
+
+        settled = true;
+
+        elements.securityAcknowledgementContinue.removeEventListener(
+          "click",
+          confirm
+        );
+
+        elements.securityAcknowledgementCancel.removeEventListener(
+          "click",
+          cancel
+        );
+
+        elements.securityAcknowledgementClose.removeEventListener(
+          "click",
+          cancel
+        );
+
+        dialog.removeEventListener(
+          "cancel",
+          handleCancel
+        );
+
+        if (dialog.open) {
+          dialog.close();
+        }
+
+        elements.securityAcknowledgementItems.replaceChildren();
+
+        resolve(result);
+      };
+
+      const confirm = () => {
+        if (
+          elements.securityAcknowledgementContinue.disabled
+        ) {
+          return;
+        }
+
+        finish(true);
+      };
+
+      const cancel = () => {
+        if (!required) {
+          finish(false);
+        }
+      };
+
+      const handleCancel = (event) => {
+        event.preventDefault();
+
+        if (!required) {
+          finish(false);
+        }
+      };
+
+      elements.securityAcknowledgementContinue.addEventListener(
+        "click",
+        confirm
+      );
+
+      elements.securityAcknowledgementCancel.addEventListener(
+        "click",
+        cancel
+      );
+
+      elements.securityAcknowledgementClose.addEventListener(
+        "click",
+        cancel
+      );
+
+      dialog.addEventListener(
+        "cancel",
+        handleCancel
+      );
+
+      dialog.showModal();
+
+      acknowledgements[0]?.focus();
     });
+  }
+
+  async function confirmSensitiveAction(action) {
+    const configuration =
+      SENSITIVE_ACTIONS[action];
+
+    if (!configuration) {
+      return false;
+    }
+
+    const warningAccepted =
+      await showSecurityAcknowledgement(
+        configuration.warning
+      );
+
+    if (!warningAccepted) {
+      return false;
+    }
+
+    return showSecurityAcknowledgement(
+      configuration.bestPractices
+    );
   }
 
   /* =========================================================
@@ -1111,13 +1478,8 @@ const WalletApp = (() => {
   async function copyMnemonic() {
     if (!state.wallet) return;
 
-    const confirmed = await showConfirmDialog({
-      title: translate("copyPhrase"),
-      message: translate(
-        "copyPhraseConfirmation"
-      ),
-      confirmLabel: translate("copyPhrase")
-    });
+    const confirmed =
+      await confirmSensitiveAction("copy");
 
     if (!confirmed) return;
 
@@ -1158,7 +1520,8 @@ const WalletApp = (() => {
 
       const originalText = button.textContent;
 
-      button.textContent = translate("copied");
+      button.textContent =
+        translate("copied");
 
       window.setTimeout(() => {
         button.textContent =
@@ -1184,13 +1547,8 @@ const WalletApp = (() => {
   async function printBackup() {
     if (!state.wallet) return;
 
-    const confirmed = await showConfirmDialog({
-      title: translate("printBackup"),
-      message: translate(
-        "printConfirmation"
-      ),
-      confirmLabel: translate("printBackup")
-    });
+    const confirmed =
+      await confirmSensitiveAction("print");
 
     if (!confirmed) return;
 
@@ -1207,6 +1565,7 @@ const WalletApp = (() => {
     }
 
     const wallet = state.wallet;
+
     const networkConfig =
       getNetworkConfig(wallet.networkKey);
 
@@ -1265,7 +1624,8 @@ const WalletApp = (() => {
           .toBase58();
 
       const xpubMatches =
-        reconstructedXpub === wallet.xpub;
+        reconstructedXpub ===
+        wallet.xpub;
 
       if (
         !addressMatches ||
@@ -1340,7 +1700,8 @@ const WalletApp = (() => {
         0x100000000 / maximum
       ) * maximum;
 
-    const value = new Uint32Array(1);
+    const value =
+      new Uint32Array(1);
 
     do {
       window.crypto.getRandomValues(value);
@@ -1361,7 +1722,9 @@ const WalletApp = (() => {
 
     const positions = new Set();
 
-    while (positions.size < challengeCount) {
+    while (
+      positions.size < challengeCount
+    ) {
       positions.add(
         getSecureRandomIndex(wordCount)
       );
@@ -1411,13 +1774,13 @@ const WalletApp = (() => {
   function getBackupChallengeWord(input) {
     if (!state.wallet) return "";
 
-    const wordIndex = Number(
-      input.dataset.wordIndex
-    );
+    const wordIndex =
+      Number(input.dataset.wordIndex);
 
-    const words = state.wallet.mnemonic
-      .trim()
-      .split(/\s+/);
+    const words =
+      state.wallet.mnemonic
+        .trim()
+        .split(/\s+/);
 
     return normalizeRecoveryWord(
       words[wordIndex]
@@ -1429,9 +1792,10 @@ const WalletApp = (() => {
     status,
     stateName
   ) {
-    const wrapper = input.closest(
-      ".backup-challenge-input-wrap"
-    );
+    const wrapper =
+      input.closest(
+        ".backup-challenge-input-wrap"
+      );
 
     if (!wrapper || !status) return;
 
@@ -1455,9 +1819,10 @@ const WalletApp = (() => {
     input,
     finalValidation = false
   ) {
-    const status = input.parentElement?.querySelector(
-      ".backup-word-status"
-    );
+    const status =
+      input.parentElement?.querySelector(
+        ".backup-word-status"
+      );
 
     const expectedWord =
       getBackupChallengeWord(input);
@@ -1507,11 +1872,6 @@ const WalletApp = (() => {
       return false;
     }
 
-    /*
-     * While the user is typing, a valid prefix remains
-     * neutral. "Correct" is shown after leaving the field
-     * or when final verification is requested.
-     */
     setBackupInputState(
       input,
       status,
@@ -1579,6 +1939,7 @@ const WalletApp = (() => {
 
         status.className =
           "backup-word-status";
+
         status.setAttribute(
           "aria-live",
           "polite"
@@ -1651,6 +2012,7 @@ const WalletApp = (() => {
     hideMnemonicForBackupVerification();
 
     elements.backupChallengeStep.hidden = false;
+
     elements.backupAcknowledgementStep.hidden =
       true;
 
@@ -1697,19 +2059,18 @@ const WalletApp = (() => {
       return;
     }
 
-    elements.backupChallengeError.hidden = true;
+    elements.backupChallengeError.hidden =
+      true;
 
-    /*
-     * Remove all entered recovery words immediately after
-     * successful verification.
-     */
     inputs.forEach((input) => {
       input.value = "";
     });
 
     elements.backupChallengeFields.replaceChildren();
 
-    elements.backupChallengeStep.hidden = true;
+    elements.backupChallengeStep.hidden =
+      true;
+
     elements.backupAcknowledgementStep.hidden =
       false;
 
@@ -1753,10 +2114,6 @@ const WalletApp = (() => {
       elements.backupVerificationDialog.close();
     }
 
-    /*
-     * Removing the fields drops the entered mnemonic
-     * fragments from the DOM.
-     */
     elements.backupChallengeFields.replaceChildren();
 
     state.backupChallengePositions = [];
@@ -1787,6 +2144,7 @@ const WalletApp = (() => {
     }
 
     elements.backupChallengeFields.replaceChildren();
+
     state.backupChallengePositions = [];
 
     clearWallet();
