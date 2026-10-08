@@ -6,8 +6,6 @@ The application generates a BIP39 recovery phrase locally, derives a BIP84 nativ
 
 Wallet secrets are generated locally in the browser and are not submitted to a backend, Bitcoin node, wallet API, analytics service, or other remote service.
 
-[View the repository](https://github.com/B3POio/bitcoin-wallet-generator)
-
 ## Features
 
 - Generate 12-word or 24-word BIP39 recovery phrases
