@@ -17,9 +17,9 @@
 (() => {
   const release = Object.freeze({
     version: "2.0.3",
-    commit: "9b51857d776a72308a2982249a5a2114457fe613",
-    commitShort: "9b51857",
-    manifestSha256: "9db4361e04598f80bcb2ad6ff3b85ba256fc487040a3b80de1cf61e852ef2ec2"
+    commit: "ff1ed0c67a13c8460dd601f8919c0561066842b8",
+    commitShort: "ff1ed0c",
+    manifestSha256: "dcf293dc899ae7bd2d521fd3fb90833f5835520b83766a61492d15d440796b9e"
   });
 
   function renderReleaseInfo() {
