@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="assets/bitcoin.svg">
 
     <title>Bitcoin Wallet Generator</title>
 
@@ -51,7 +52,7 @@
 
                     <div class="brand-text">
                         <span class="brand-name">Bitcoin Wallet</span>
-                        <span class="brand-status" data-i18n="online">ONLINE</span>
+                        <span class="brand-status" data-i18n="offline">OFFLINE</span>
                     </div>
                 </a>
 
@@ -544,10 +545,16 @@
             </section>
 
             <section class="wallet-section backup-section">
-                <h3 data-i18n="backup">Backup</h3>
-                <p data-i18n="backupDescription">
-                    Store your recovery phrase securely before destroying this wallet from the browser.
-                </p>
+                <div class="backup-notice">
+                    <div class="backup-notice-icon" aria-hidden="true">!</div>
+
+                    <div>
+                        <h3 data-i18n="backup">Backup</h3>
+                        <p data-i18n="backupDescription">
+                            Store your recovery phrase securely before destroying this wallet from the browser.
+                        </p>
+                    </div>
+                </div>
 
                 <div class="button-row">
                     <button
@@ -647,6 +654,71 @@
                     class="button button-primary"
                 >
                     OK
+                </button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- =====================================================
+     SECURITY ACKNOWLEDGEMENT DIALOG
+     ===================================================== -->
+    <dialog
+        id="securityAcknowledgementDialog"
+        class="app-dialog security-acknowledgement-dialog"
+        aria-labelledby="securityAcknowledgementTitle"
+        aria-describedby="securityAcknowledgementMessage"
+    >
+        <div class="dialog-card">
+            <div class="dialog-header">
+                <div>
+                    <span
+                        id="securityAcknowledgementEyebrow"
+                        class="dialog-eyebrow"
+                    >
+                        Security
+                    </span>
+
+                    <h2 id="securityAcknowledgementTitle">
+                        Security Acknowledgement
+                    </h2>
+                </div>
+
+                <button
+                    type="button"
+                    id="securityAcknowledgementClose"
+                    class="dialog-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+            </div>
+
+            <p
+                id="securityAcknowledgementMessage"
+                class="dialog-message"
+            ></p>
+
+            <div
+                id="securityAcknowledgementItems"
+                class="security-acknowledgements"
+            ></div>
+
+            <div class="dialog-actions">
+                <button
+                    type="button"
+                    id="securityAcknowledgementCancel"
+                    class="button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    id="securityAcknowledgementContinue"
+                    class="button button-primary"
+                    disabled
+                >
+                    Acknowledge
                 </button>
             </div>
         </div>
