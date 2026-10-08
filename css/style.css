@@ -873,6 +873,112 @@ main.container {
   border-color: var(--success);
 }
 
+.backup-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--warning);
+  border-radius: 12px;
+}
+
+.backup-notice-icon {
+  flex: 0 0 30px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--warning);
+  font-weight: 800;
+  border: 1px solid var(--warning);
+  border-radius: 50%;
+}
+
+.backup-notice h3 {
+  margin: 0 0 4px;
+}
+
+.backup-notice p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* =========================================================
+   Security Acknowledgements
+   ========================================================= */
+
+.security-acknowledgements {
+  display: grid;
+  gap: 10px;
+}
+
+.security-acknowledgement {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 16px;
+
+  color: var(--text);
+  text-align: left;
+
+  background: var(--surface-soft);
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.15s ease;
+}
+
+.security-acknowledgement:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+.security-acknowledgement:active {
+  transform: translateY(1px);
+}
+
+.security-acknowledgement:focus-visible {
+  outline: 3px solid rgba(247, 147, 26, 0.25);
+  outline-offset: 2px;
+}
+
+.security-acknowledgement.is-confirmed {
+  background: var(--success-soft);
+  border-color: var(--success);
+}
+
+.security-acknowledgement.is-confirmed .acknowledgement-check {
+  color: #ffffff;
+  background: var(--success);
+  border-color: var(--success);
+}
+
+:root[data-theme="dark"]
+.security-acknowledgement.is-confirmed {
+  background: var(--success-soft);
+  border-color: #1d6b49;
+}
+
+@media (max-width: 640px) {
+  .security-acknowledgement {
+    padding: 13px;
+  }
+}
+
 /* =========================================================
    Disabled Buttons
    ========================================================= */
