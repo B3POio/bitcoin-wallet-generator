@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-VERSION="2.0.2"
+VERSION="2.0.3"
 TAG="v${VERSION}"
 
 ROOT="$(git rev-parse --show-toplevel)"
